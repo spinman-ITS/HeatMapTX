@@ -178,27 +178,37 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     
     plot_df = pd.DataFrame(plot_data)
     
-    # Create a scatter plot heat map for better compatibility
-    fig = px.scatter_map(
-        plot_df,
-        lat='lat',
-        lon='lon',
-        size='households',
-        color='households',
-        color_continuous_scale='Viridis',
-        size_max=30,
-        zoom=6,
-        center=dict(lat=31.5, lon=-99.9),  # Center of Texas
-        map_style='open-street-map',
-        title='Texas Household Heat Map',
-        hover_data={
-            'zip_code': True,
-            'city': True,
-            'households': True,
-            'lat': False,
-            'lon': False
-        },
-        labels={'households': 'Number of Households'}
+    # Create a heat map using go.Scattermap for more control
+    fig = go.Figure()
+    
+    # Add household data points with traditional heat map colors
+    fig.add_trace(
+        go.Scattermap(
+            lat=plot_df['lat'],
+            lon=plot_df['lon'],
+            mode='markers+text',
+            marker=dict(
+                size=plot_df['households'] * 2 + 10,  # Scale marker size
+                color=plot_df['households'],
+                colorscale='Hot',  # Traditional heat map colors: dark to bright
+                colorbar=dict(
+                    title="Number of Households",
+                    x=1.02
+                ),
+                showscale=True,
+                opacity=0.8,
+                line=dict(width=1, color='white')
+            ),
+            text=plot_df['households'].astype(str),  # Show household numbers
+            textposition='middle center',
+            textfont=dict(size=10, color='white'),
+            hovertemplate='<b>Zip Code:</b> %{customdata[0]}<br>' +
+                         '<b>City:</b> %{customdata[1]}<br>' +
+                         '<b>Households:</b> %{customdata[2]}<extra></extra>',
+            customdata=plot_df[['zip_code', 'city', 'households']].values,
+            name='Household Data',
+            showlegend=False
+        )
     )
     
     # Add Trademark Church marker
@@ -207,35 +217,41 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     
     if church_coords:
         church_lat, church_lon = church_coords
-        # Add church marker with a distinctive icon
+        # Add church marker with a simple but distinctive design
         fig.add_trace(
             go.Scattermap(
                 lat=[church_lat],
                 lon=[church_lon],
                 mode='markers+text',
                 marker=dict(
-                    size=20,
-                    color='red',
-                    symbol='religious-christian',
-                    opacity=1.0
+                    size=25,
+                    color='darkred',
+                    symbol='circle',
+                    opacity=1.0,
+                    line=dict(width=3, color='white')
                 ),
                 text=['⛪'],
                 textposition='middle center',
-                textfont=dict(size=16, color='white'),
+                textfont=dict(size=14, color='white'),
                 hovertemplate='<b>Trademark Church</b><br>7101 Trail Lake Dr<br>Fort Worth, TX 76133<extra></extra>',
                 name='Trademark Church',
                 showlegend=True
             )
         )
     
-    # Update layout
+    # Update layout for the map
     fig.update_layout(
         height=600,
         margin=dict(l=0, r=0, t=50, b=0),
         map=dict(
             style='open-street-map',
-            center=dict(lat=31.5, lon=-99.9),
-            zoom=6
+            center=dict(lat=32.8, lon=-97.0),  # Center closer to Fort Worth area
+            zoom=8
+        ),
+        title=dict(
+            text='Texas Household Heat Map with Trademark Church',
+            x=0.5,
+            xanchor='center'
         ),
         showlegend=True,
         legend=dict(
