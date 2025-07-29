@@ -196,8 +196,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
                     x=1.02
                 ),
                 showscale=True,
-                opacity=0.8,
-                line=dict(width=1, color='white')
+                opacity=0.8
             ),
             text=plot_df['households'].astype(str),  # Show household numbers
             textposition='middle center',
@@ -226,9 +225,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
                 marker=dict(
                     size=25,
                     color='darkred',
-                    symbol='circle',
-                    opacity=1.0,
-                    line=dict(width=3, color='white')
+                    opacity=1.0
                 ),
                 text=['⛪'],
                 textposition='middle center',
