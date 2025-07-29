@@ -144,49 +144,27 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     
     plot_df = pd.DataFrame(plot_data)
     
-    # Create the heat map
-    fig = px.density_mapbox(
+    # Create a scatter plot heat map for better compatibility
+    fig = px.scatter_mapbox(
         plot_df,
         lat='lat',
         lon='lon',
-        z='households',
-        radius=20,
-        center=dict(lat=31.5, lon=-99.9),  # Center of Texas
-        zoom=5.5,
-        mapbox_style='open-street-map',
+        size='households',
+        color='households',
         color_continuous_scale='Viridis',
-        title='Texas Household Density Heat Map'
-    )
-    
-    # Add scatter points for better visibility
-    fig.add_trace(
-        go.Scattermapbox(
-            lat=plot_df['lat'],
-            lon=plot_df['lon'],
-            mode='markers',
-            marker=dict(
-                size=plot_df['households'],
-                sizemode='diameter',
-                sizemin=5,
-                sizemax=30,
-                color=plot_df['households'],
-                colorscale='Viridis',
-                opacity=0.7,
-                showscale=True,
-                colorbar=dict(
-                    title="Number of Households",
-                    x=1.02
-                )
-            ),
-            text=[
-                f"Zip: {row['zip_code']}<br>"
-                f"City: {row['city']}<br>"
-                f"Households: {row['households']}"
-                for _, row in plot_df.iterrows()
-            ],
-            hovertemplate='%{text}<extra></extra>',
-            name='Zip Code Data'
-        )
+        size_max=30,
+        zoom=6,
+        center=dict(lat=31.5, lon=-99.9),  # Center of Texas
+        mapbox_style='open-street-map',
+        title='Texas Household Heat Map',
+        hover_data={
+            'zip_code': True,
+            'city': True,
+            'households': True,
+            'lat': False,
+            'lon': False
+        },
+        labels={'households': 'Number of Households'}
     )
     
     # Update layout
@@ -196,7 +174,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
         mapbox=dict(
             style='open-street-map',
             center=dict(lat=31.5, lon=-99.9),
-            zoom=5.5
+            zoom=6
         ),
         showlegend=False
     )
