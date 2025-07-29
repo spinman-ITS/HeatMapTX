@@ -17,6 +17,40 @@ st.set_page_config(
 
 # Cache for zip code coordinates to avoid repeated API calls
 @st.cache_data
+def get_church_coordinates(address: str) -> Optional[Tuple[float, float]]:
+    """
+    Get latitude and longitude coordinates for a specific address.
+    Returns (lat, lon) tuple or None if geocoding fails.
+    """
+    base_url = "https://nominatim.openstreetmap.org/search"
+    
+    try:
+        params = {
+            'q': address,
+            'format': 'json',
+            'limit': 1,
+            'countrycodes': 'us'
+        }
+        
+        headers = {
+            'User-Agent': 'Texas-Household-HeatMap/1.0'
+        }
+        
+        response = requests.get(base_url, params=params, headers=headers, timeout=10)
+        
+        if response.status_code == 200:
+            data = response.json()
+            if data:
+                lat = float(data[0]['lat'])
+                lon = float(data[0]['lon'])
+                return (lat, lon)
+    
+    except Exception as e:
+        st.warning(f"Could not geocode address {address}: {str(e)}")
+    
+    return None
+
+@st.cache_data
 def get_zip_coordinates(zip_codes: List[str]) -> Dict[str, Tuple[float, float]]:
     """
     Get latitude and longitude coordinates for zip codes using a geocoding service.
@@ -145,7 +179,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     plot_df = pd.DataFrame(plot_data)
     
     # Create a scatter plot heat map for better compatibility
-    fig = px.scatter_mapbox(
+    fig = px.scatter_map(
         plot_df,
         lat='lat',
         lon='lon',
@@ -155,7 +189,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
         size_max=30,
         zoom=6,
         center=dict(lat=31.5, lon=-99.9),  # Center of Texas
-        mapbox_style='open-street-map',
+        map_style='open-street-map',
         title='Texas Household Heat Map',
         hover_data={
             'zip_code': True,
@@ -167,16 +201,49 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
         labels={'households': 'Number of Households'}
     )
     
+    # Add Trademark Church marker
+    church_address = "7101 Trail Lake Dr, Fort Worth TX 76133"
+    church_coords = get_church_coordinates(church_address)
+    
+    if church_coords:
+        church_lat, church_lon = church_coords
+        # Add church marker with a distinctive icon
+        fig.add_trace(
+            go.Scattermap(
+                lat=[church_lat],
+                lon=[church_lon],
+                mode='markers+text',
+                marker=dict(
+                    size=20,
+                    color='red',
+                    symbol='religious-christian',
+                    opacity=1.0
+                ),
+                text=['⛪'],
+                textposition='middle center',
+                textfont=dict(size=16, color='white'),
+                hovertemplate='<b>Trademark Church</b><br>7101 Trail Lake Dr<br>Fort Worth, TX 76133<extra></extra>',
+                name='Trademark Church',
+                showlegend=True
+            )
+        )
+    
     # Update layout
     fig.update_layout(
         height=600,
         margin=dict(l=0, r=0, t=50, b=0),
-        mapbox=dict(
+        map=dict(
             style='open-street-map',
             center=dict(lat=31.5, lon=-99.9),
             zoom=6
         ),
-        showlegend=False
+        showlegend=True,
+        legend=dict(
+            yanchor="top",
+            y=0.99,
+            xanchor="left",
+            x=0.01
+        )
     )
     
     return fig
@@ -214,6 +281,7 @@ def main():
         - Hover tooltips with detailed information
         - Color-coded visualization by household count
         - Automatic geocoding of zip codes
+        - Trademark Church location marker (⛪)
         """)
     
     # Main content area
