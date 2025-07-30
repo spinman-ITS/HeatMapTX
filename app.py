@@ -368,32 +368,14 @@ def main():
             st.markdown("---")
             st.markdown("### 📈 Data Summary")
             
-            # Create household count ranges for legend
-            household_counts = processed_df['Number of Households'].values
-            min_households = household_counts.min()
-            max_households = household_counts.max()
-            
-            # Create quartiles for color coding reference
-            q1 = processed_df['Number of Households'].quantile(0.25)
-            q2 = processed_df['Number of Households'].quantile(0.5)
-            q3 = processed_df['Number of Households'].quantile(0.75)
+            # Display top zip codes summary
             
             st.markdown("")  # Add some vertical spacing
-            col1, col2 = st.columns(2)
             
-            with col1:
-                st.markdown("**Household Count Ranges:**")
-                st.markdown(f"- Minimum: {min_households} households")
-                st.markdown(f"- 1st Quartile: {q1:.0f} households")
-                st.markdown(f"- Median: {q2:.0f} households")
-                st.markdown(f"- 3rd Quartile: {q3:.0f} households")
-                st.markdown(f"- Maximum: {max_households} households")
-            
-            with col2:
-                st.markdown("**Top 5 Zip Codes by Households:**")
-                top_5 = processed_df.nlargest(5, 'Number of Households')
-                for _, row in top_5.iterrows():
-                    st.markdown(f"- {row['Zip Codes']} ({row['City']}): {row['Number of Households']} households")
+            st.markdown("**Top 5 Zip Codes by Households:**")
+            top_5 = processed_df.nlargest(5, 'Number of Households')
+            for _, row in top_5.iterrows():
+                st.markdown(f"- {row['Zip Codes']} ({row['City']}): {row['Number of Households']} households")
             
         except Exception as e:
             st.error(f"❌ Error processing file: {str(e)}")
