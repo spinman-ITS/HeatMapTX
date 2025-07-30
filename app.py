@@ -217,22 +217,22 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     
     if church_coords:
         church_lat, church_lon = church_coords
-        # Add church marker with a simple but distinctive design
+        # Add Trademark Church marker with TM logo
         fig.add_trace(
             go.Scattermap(
                 lat=[church_lat],
                 lon=[church_lon],
                 mode='markers+text',
                 marker=dict(
-                    size=25,
-                    color='darkred',
+                    size=30,
+                    color='darkblue',
                     opacity=1.0
                 ),
-                text=['⛪'],
+                text=['TM'],
                 textposition='middle center',
-                textfont=dict(size=14, color='white'),
+                textfont=dict(size=12, color='white', family='Arial Black'),
                 hovertemplate='<b>Trademark Church</b><br>7101 Trail Lake Dr<br>Fort Worth, TX 76133<extra></extra>',
-                name='Trademark Church',
+                name='Trademark Church (TM)',
                 showlegend=True
             )
         )
