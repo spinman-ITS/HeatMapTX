@@ -34,8 +34,22 @@ st.markdown("""
     }
     
     /* Sidebar styling */
-    .css-1d391kg {
-        background-color: #f8f9fa;
+    .css-1d391kg, .css-1cypcdb {
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    /* Sidebar content styling */
+    .css-1d391kg .stMarkdown, .css-1cypcdb .stMarkdown {
+        color: white;
+    }
+    
+    /* File uploader styling */
+    [data-testid="stFileUploader"] {
+        background-color: rgba(255,255,255,0.1);
+        border-radius: 10px;
+        padding: 1rem;
+        backdrop-filter: blur(10px);
     }
     
     /* Metric cards styling */
@@ -49,19 +63,31 @@ st.markdown("""
     
     /* Upload section styling */
     .upload-section {
-        background-color: white;
+        background-color: rgba(255,255,255,0.15);
         padding: 1.5rem;
-        border-radius: 10px;
-        border: 2px dashed #667eea;
+        border-radius: 15px;
+        border: 1px solid rgba(255,255,255,0.2);
         margin-bottom: 1rem;
+        backdrop-filter: blur(10px);
     }
     
     /* Info section styling */
     .info-section {
-        background-color: #f8f9fa;
+        background-color: rgba(255,255,255,0.1);
         padding: 1.5rem;
-        border-radius: 10px;
-        border-left: 4px solid #667eea;
+        border-radius: 15px;
+        border: 1px solid rgba(255,255,255,0.2);
+        backdrop-filter: blur(10px);
+    }
+    
+    /* Sidebar text styling */
+    .upload-section h3, .info-section h3 {
+        color: white !important;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    .info-section p, .info-section li {
+        color: rgba(255,255,255,0.9) !important;
     }
     
     /* Success/warning/error message styling */
@@ -355,7 +381,7 @@ def main():
     with st.sidebar:
         st.markdown("""
         <div class="upload-section">
-            <h3 style="color: #667eea; margin-top: 0;">📁 File Upload</h3>
+            <h3 style="color: white; margin-top: 0; font-weight: 600;">📁 File Upload</h3>
         </div>
         """, unsafe_allow_html=True)
         
@@ -371,17 +397,17 @@ def main():
         # Modern information section
         st.markdown("""
         <div class="info-section">
-            <h3 style="color: #667eea; margin-top: 0;">ℹ️ Information</h3>
-            <div style="line-height: 1.6;">
-                <p><strong>Required CSV Format:</strong></p>
-                <ul style="margin-left: 1rem;">
+            <h3 style="color: white; margin-top: 0; font-weight: 600;">ℹ️ Information</h3>
+            <div style="line-height: 1.8;">
+                <p style="color: rgba(255,255,255,0.95); font-weight: 500;"><strong>Required CSV Format:</strong></p>
+                <ul style="margin-left: 1rem; color: rgba(255,255,255,0.9);">
                     <li>Zip Codes: Texas zip codes</li>
                     <li>City: City names</li>
                     <li>Number of Households: Numeric values</li>
                 </ul>
                 
-                <p><strong>Features:</strong></p>
-                <ul style="margin-left: 1rem;">
+                <p style="color: rgba(255,255,255,0.95); font-weight: 500; margin-top: 1.5rem;"><strong>Features:</strong></p>
+                <ul style="margin-left: 1rem; color: rgba(255,255,255,0.9);">
                     <li>Interactive heat map with zoom/pan</li>
                     <li>Hover tooltips with detailed information</li>
                     <li>Color-coded visualization by household count</li>
