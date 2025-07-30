@@ -364,7 +364,8 @@ def main():
             
             st.plotly_chart(fig, use_container_width=True)
             
-            # Display legend/summary
+            # Add spacing and display legend/summary
+            st.markdown("---")
             st.markdown("### 📈 Data Summary")
             
             # Create household count ranges for legend
@@ -377,6 +378,7 @@ def main():
             q2 = processed_df['Number of Households'].quantile(0.5)
             q3 = processed_df['Number of Households'].quantile(0.75)
             
+            st.markdown("")  # Add some vertical spacing
             col1, col2 = st.columns(2)
             
             with col1:
