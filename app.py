@@ -190,7 +190,8 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
             marker=dict(
                 size=plot_df['households'] * 2 + 10,  # Scale marker size
                 color=plot_df['households'],
-                colorscale='Hot',  # Traditional heat map colors: dark to bright
+                colorscale=[[0, 'yellow'], [0.5, 'orange'], [1, 'red']],  # Custom heat map: yellow to red
+                reversescale=False,  # Red for high values, yellow for low values
                 colorbar=dict(
                     title="Number of Households",
                     x=1.02
@@ -200,7 +201,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
             ),
             text=plot_df['households'].astype(str),  # Show household numbers
             textposition='middle center',
-            textfont=dict(size=10, color='white'),
+            textfont=dict(size=10, color='black'),
             hovertemplate='<b>Zip Code:</b> %{customdata[0]}<br>' +
                          '<b>City:</b> %{customdata[1]}<br>' +
                          '<b>Households:</b> %{customdata[2]}<extra></extra>',
