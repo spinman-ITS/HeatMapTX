@@ -377,17 +377,11 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # Modern sidebar for file upload and information
+    # Modern sidebar for file upload
     with st.sidebar:
-        st.markdown("""
-        <div class="upload-section">
-            <h3 style="color: white; margin-top: 0; font-weight: 600;">📁 File Upload</h3>
-        </div>
-        """, unsafe_allow_html=True)
-        
         # File uploader
         uploaded_file = st.file_uploader(
-            "Choose a CSV file",
+            "File Upload",
             type=['csv'],
             help="Upload a CSV file with columns: Zip Codes, City, Number of Households"
         )
