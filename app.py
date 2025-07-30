@@ -267,6 +267,7 @@ def main():
     Main application function.
     """
     st.title("🗺️ Texas Household Heat Map Generator")
+    st.markdown("<p style='font-size: 14px; color: #666; margin-top: -10px;'>Powered By Inman Technology Labs</p>", unsafe_allow_html=True)
     st.markdown("Upload a CSV file with Texas zip code household data to generate an interactive heat map.")
     
     # Sidebar for file upload and information
