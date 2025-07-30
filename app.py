@@ -392,31 +392,7 @@ def main():
             help="Upload a CSV file with columns: Zip Codes, City, Number of Households"
         )
         
-        st.markdown("<br>", unsafe_allow_html=True)
-        
-        # Modern information section
-        st.markdown("""
-        <div class="info-section">
-            <h3 style="color: white; margin-top: 0; font-weight: 600;">ℹ️ Information</h3>
-            <div style="line-height: 1.8;">
-                <p style="color: rgba(255,255,255,0.95); font-weight: 500;"><strong>Required CSV Format:</strong></p>
-                <ul style="margin-left: 1rem; color: rgba(255,255,255,0.9);">
-                    <li>Zip Codes: Texas zip codes</li>
-                    <li>City: City names</li>
-                    <li>Number of Households: Numeric values</li>
-                </ul>
-                
-                <p style="color: rgba(255,255,255,0.95); font-weight: 500; margin-top: 1.5rem;"><strong>Features:</strong></p>
-                <ul style="margin-left: 1rem; color: rgba(255,255,255,0.9);">
-                    <li>Interactive heat map with zoom/pan</li>
-                    <li>Hover tooltips with detailed information</li>
-                    <li>Color-coded visualization by household count</li>
-                    <li>Automatic geocoding of zip codes</li>
-                    <li>Trademark Church location marker (TM)</li>
-                </ul>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+
     
     # Main content area
     if uploaded_file is not None:
