@@ -15,6 +15,82 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Custom CSS for modern UI
+st.markdown("""
+<style>
+    /* Main container styling */
+    .main > div {
+        padding-top: 2rem;
+    }
+    
+    /* Header styling */
+    .main-header {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        color: white;
+        text-align: center;
+    }
+    
+    /* Sidebar styling */
+    .css-1d391kg {
+        background-color: #f8f9fa;
+    }
+    
+    /* Metric cards styling */
+    [data-testid="metric-container"] {
+        background-color: white;
+        border: 1px solid #e0e0e0;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* Upload section styling */
+    .upload-section {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        border: 2px dashed #667eea;
+        margin-bottom: 1rem;
+    }
+    
+    /* Info section styling */
+    .info-section {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 10px;
+        border-left: 4px solid #667eea;
+    }
+    
+    /* Success/warning/error message styling */
+    .stSuccess, .stWarning, .stError {
+        border-radius: 8px;
+        margin: 1rem 0;
+    }
+    
+    /* Button styling */
+    .stButton > button {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+    }
+    
+    /* Data summary section */
+    .data-summary {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-top: 2rem;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Cache for zip code coordinates to avoid repeated API calls
 @st.cache_data
 def get_church_coordinates(address: str) -> Optional[Tuple[float, float]]:
@@ -266,13 +342,22 @@ def main():
     """
     Main application function.
     """
-    st.title("🗺️ Texas Household Heat Map Generator")
-    st.markdown("<p style='font-size: 14px; color: #666; margin-top: -10px;'>Powered By Inman Technology Labs</p>", unsafe_allow_html=True)
-    st.markdown("Upload a CSV file with Texas zip code household data to generate an interactive heat map.")
+    # Modern header section
+    st.markdown("""
+    <div class="main-header">
+        <h1 style="margin: 0; font-size: 2.5rem; font-weight: 700;">🗺️ Texas Household Heat Map Generator</h1>
+        <p style="margin: 0.5rem 0 0 0; font-size: 1rem; opacity: 0.9;">Powered By Inman Technology Labs</p>
+        <p style="margin: 1rem 0 0 0; font-size: 1.1rem; opacity: 0.95;">Upload a CSV file with Texas zip code household data to generate an interactive heat map</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Sidebar for file upload and information
+    # Modern sidebar for file upload and information
     with st.sidebar:
-        st.header("📁 File Upload")
+        st.markdown("""
+        <div class="upload-section">
+            <h3 style="color: #667eea; margin-top: 0;">📁 File Upload</h3>
+        </div>
+        """, unsafe_allow_html=True)
         
         # File uploader
         uploaded_file = st.file_uploader(
@@ -281,23 +366,31 @@ def main():
             help="Upload a CSV file with columns: Zip Codes, City, Number of Households"
         )
         
-        st.markdown("---")
+        st.markdown("<br>", unsafe_allow_html=True)
         
-        # Information section
-        st.header("ℹ️ Information")
+        # Modern information section
         st.markdown("""
-        **Required CSV Format:**
-        - Zip Codes: Texas zip codes
-        - City: City names
-        - Number of Households: Numeric values
-        
-        **Features:**
-        - Interactive heat map with zoom/pan
-        - Hover tooltips with detailed information
-        - Color-coded visualization by household count
-        - Automatic geocoding of zip codes
-        - Trademark Church location marker (⛪)
-        """)
+        <div class="info-section">
+            <h3 style="color: #667eea; margin-top: 0;">ℹ️ Information</h3>
+            <div style="line-height: 1.6;">
+                <p><strong>Required CSV Format:</strong></p>
+                <ul style="margin-left: 1rem;">
+                    <li>Zip Codes: Texas zip codes</li>
+                    <li>City: City names</li>
+                    <li>Number of Households: Numeric values</li>
+                </ul>
+                
+                <p><strong>Features:</strong></p>
+                <ul style="margin-left: 1rem;">
+                    <li>Interactive heat map with zoom/pan</li>
+                    <li>Hover tooltips with detailed information</li>
+                    <li>Color-coded visualization by household count</li>
+                    <li>Automatic geocoding of zip codes</li>
+                    <li>Trademark Church location marker (TM)</li>
+                </ul>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Main content area
     if uploaded_file is not None:
@@ -322,7 +415,8 @@ def main():
             with st.spinner("Processing data..."):
                 processed_df = clean_and_process_data(df)
             
-            # Display data summary
+            # Modern metrics display
+            st.markdown("<h3 style='color: #667eea; margin-bottom: 1rem;'>📊 Data Overview</h3>", unsafe_allow_html=True)
             col1, col2, col3, col4 = st.columns(4)
             
             with col1:
@@ -365,29 +459,40 @@ def main():
             
             st.plotly_chart(fig, use_container_width=True)
             
-            # Add spacing and display legend/summary
-            st.markdown("---")
-            st.markdown("### 📈 Data Summary")
+            # Modern data summary section
+            st.markdown("""
+            <div class="data-summary">
+                <h3 style="color: #667eea; margin-top: 0;">📈 Data Summary</h3>
+                <h4 style="color: #555; margin-bottom: 1rem;">Top 5 Zip Codes by Households</h4>
+            </div>
+            """, unsafe_allow_html=True)
             
-            # Display top zip codes summary
-            
-            st.markdown("")  # Add some vertical spacing
-            
-            st.markdown("**Top 5 Zip Codes by Households:**")
+            # Display top zip codes in a modern format
             top_5 = processed_df.nlargest(5, 'Number of Households')
-            for _, row in top_5.iterrows():
-                st.markdown(f"- {row['Zip Codes']} ({row['City']}): {row['Number of Households']} households")
+            
+            for i, (_, row) in enumerate(top_5.iterrows(), 1):
+                st.markdown(f"""
+                <div style="background-color: #f8f9fa; padding: 0.8rem; margin: 0.5rem 0; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <strong style="color: #667eea;">#{i}</strong> 
+                    <strong>{row['Zip Codes']}</strong> ({row['City']}) - 
+                    <span style="color: #28a745; font-weight: bold;">{row['Number of Households']} households</span>
+                </div>
+                """, unsafe_allow_html=True)
             
         except Exception as e:
             st.error(f"❌ Error processing file: {str(e)}")
             st.markdown("Please ensure your CSV file is properly formatted and contains valid data.")
     
     else:
-        # Show sample data format when no file is uploaded
-        st.info("👆 Please upload a CSV file using the sidebar to generate a heat map.")
-        
-        st.markdown("### 📋 Sample CSV Format")
-        st.markdown("Your CSV file should have the following structure:")
+        # Modern welcome section when no file is uploaded
+        st.markdown("""
+        <div style="text-align: center; padding: 3rem 1rem; background-color: #f8f9fa; border-radius: 15px; margin: 2rem 0;">
+            <h3 style="color: #667eea; margin-bottom: 1rem;">Welcome to the Texas Household Heat Map Generator</h3>
+            <p style="font-size: 1.1rem; color: #666; margin-bottom: 2rem;">Upload a CSV file using the sidebar to generate an interactive heat map visualization</p>
+            <div style="background-color: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin: 2rem auto; max-width: 600px;">
+                <h4 style="color: #667eea; margin-top: 0;">📋 Sample CSV Format</h4>
+                <p style="color: #666; margin-bottom: 1.5rem;">Your CSV file should have the following structure:</p>
+        """, unsafe_allow_html=True)
         
         sample_data = {
             'Zip Codes': ['76123', '76133', '76036', '76116', '76132'],
@@ -398,7 +503,7 @@ def main():
         sample_df = pd.DataFrame(sample_data)
         st.dataframe(sample_df, use_container_width=True)
         
-        # Download sample CSV
+        # Download sample CSV with modern styling
         csv_sample = sample_df.to_csv(index=False)
         st.download_button(
             label="📥 Download Sample CSV",
@@ -406,6 +511,8 @@ def main():
             file_name="sample_texas_households.csv",
             mime="text/csv"
         )
+        
+        st.markdown("</div></div>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
