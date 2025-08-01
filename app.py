@@ -492,9 +492,8 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
             text=plot_df['households'].astype(str),
             textposition='middle center',
             textfont=dict(size=10, color='black', family='Arial Black'),
-            hoverinfo='text',
-            hovertext=[f"Zip Code: {row['zip_code']}<br>City: {row['city']}<br>Households: {row['households']}" 
-                      for _, row in plot_df.iterrows()],
+            hoverinfo='none',  # Disable default hover
+            customdata=plot_df[['zip_code', 'city', 'households']].values,
             name='Household Data',
             showlegend=False
         )
@@ -547,6 +546,12 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
             xanchor="left",
             x=0.01
         )
+    )
+    
+    # Add JavaScript for custom tooltips
+    fig.update_traces(
+        selector=dict(name='Household Data'),
+        hovertemplate="<b>Zip Code:</b> %{customdata[0]}<br><b>City:</b> %{customdata[1]}<br><b>Households:</b> %{customdata[2]}<extra></extra>"
     )
     
     return fig
