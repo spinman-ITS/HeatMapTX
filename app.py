@@ -561,6 +561,24 @@ def main():
             help="Upload a CSV file with columns: Zip Codes, City, Number of Households"
         )
         st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Sample CSV download button right below uploader
+        if uploaded_file is None:
+            sample_data = {
+                'Zip Codes': ['76123', '76133', '76036', '76116', '76132'],
+                'City': ['Fort Worth', 'Fort Worth', 'Crowley', 'Fort Worth', 'Fort Worth'],
+                'Number of Households': [74, 52, 42, 22, 21]
+            }
+            
+            sample_df = pd.DataFrame(sample_data)
+            csv_sample = sample_df.to_csv(index=False)
+            
+            st.download_button(
+                label="📥 Download Sample CSV",
+                data=csv_sample,
+                file_name="sample_texas_households.csv",
+                mime="text/csv"
+            )
     
     # Main content area
     if uploaded_file is not None:
@@ -659,24 +677,8 @@ def main():
             st.markdown("Please ensure your CSV file is properly formatted and contains valid data.")
     
     else:
-        # Sample CSV download button when no file is uploaded
-        col1, col2, col3 = st.columns([1, 1, 1])
-        with col2:
-            sample_data = {
-                'Zip Codes': ['76123', '76133', '76036', '76116', '76132'],
-                'City': ['Fort Worth', 'Fort Worth', 'Crowley', 'Fort Worth', 'Fort Worth'],
-                'Number of Households': [74, 52, 42, 22, 21]
-            }
-            
-            sample_df = pd.DataFrame(sample_data)
-            csv_sample = sample_df.to_csv(index=False)
-            
-            st.download_button(
-                label="📥 Download Sample CSV",
-                data=csv_sample,
-                file_name="sample_texas_households.csv",
-                mime="text/csv"
-            )
+        # Show nothing when no file is uploaded - clean minimal interface
+        pass
 
 if __name__ == "__main__":
     main()
