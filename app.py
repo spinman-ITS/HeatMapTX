@@ -454,34 +454,47 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     
     plot_df = pd.DataFrame(plot_data)
     
-    # Create heat map using go.Scattermap for reliable display
+    # Create heat map with proper color mapping
     fig = go.Figure()
     
-    # Add household data points with heat map colors
+    # Define color mapping for heat map effect (yellow to red)
+    max_households = plot_df['households'].max()
+    min_households = plot_df['households'].min()
+    
+    def get_heat_color(households):
+        # Normalize to 0-1 range
+        if max_households == min_households:
+            normalized = 0.5
+        else:
+            normalized = (households - min_households) / (max_households - min_households)
+        
+        # Map to colors: yellow (low) to red (high)
+        if normalized < 0.5:
+            # Yellow to orange
+            return f'rgb({255}, {int(255 - normalized * 100)}, 0)'
+        else:
+            # Orange to red
+            return f'rgb(255, {int(255 - (normalized - 0.5) * 510)}, 0)'
+    
+    # Add household data points
+    colors = [get_heat_color(h) for h in plot_df['households']]
+    
     fig.add_trace(
         go.Scattermap(
             lat=plot_df['lat'],
             lon=plot_df['lon'],
             mode='markers+text',
             marker=dict(
-                size=plot_df['households'] * 2 + 15,  # Scale marker size
-                color=plot_df['households'],
-                colorscale='Viridis',  # Use a reliable colorscale
-                reversescale=False,
-                colorbar=dict(
-                    title="Households",
-                    x=1.02
-                ),
-                showscale=True,
+                size=plot_df['households'] * 2 + 15,
+                color=colors,
                 opacity=0.8
             ),
             text=plot_df['households'].astype(str),
             textposition='middle center',
-            textfont=dict(size=10, color='white', family='Arial Black'),
-            hovertemplate='<b>Zip Code:</b> %{customdata[0]}<br>' +
-                         '<b>City:</b> %{customdata[1]}<br>' +
-                         '<b>Households:</b> %{customdata[2]}<extra></extra>',
-            customdata=plot_df[['zip_code', 'city', 'households']].values,
+            textfont=dict(size=10, color='black', family='Arial Black'),
+            hoverinfo='text',
+            hovertext=[f"Zip Code: {row['zip_code']}<br>City: {row['city']}<br>Households: {row['households']}" 
+                      for _, row in plot_df.iterrows()],
             name='Household Data',
             showlegend=False
         )
