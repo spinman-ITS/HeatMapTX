@@ -534,14 +534,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
             xanchor="left",
             x=0.01
         ),
-        # Fix hover tooltip styling
-        hoverlabel=dict(
-            bgcolor="white",
-            bordercolor="black",
-            font_size=12,
-            font_family="Inter",
-            font_color="black"
-        )
+# Remove custom hover styling to use Plotly defaults
     )
     
     return fig
