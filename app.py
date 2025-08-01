@@ -21,21 +21,21 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --glass-bg: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.12);
-    --shadow-light: 0 8px 32px rgba(31, 38, 135, 0.15);
-    --shadow-medium: 0 12px 40px rgba(31, 38, 135, 0.25);
+    --primary-gradient: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #000000 100%);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --shadow-light: 0 4px 16px rgba(0, 0, 0, 0.3);
+    --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.4);
     --text-primary: #ffffff;
-    --text-secondary: rgba(255, 255, 255, 0.85);
-    --text-muted: rgba(255, 255, 255, 0.65);
-    --border-radius: 16px;
-    --border-radius-sm: 12px;
-    --spacing-xs: 0.5rem;
-    --spacing-sm: 1rem;
-    --spacing-md: 1.5rem;
-    --spacing-lg: 2rem;
-    --spacing-xl: 3rem;
+    --text-secondary: rgba(255, 255, 255, 0.9);
+    --text-muted: rgba(255, 255, 255, 0.7);
+    --border-radius: 12px;
+    --border-radius-sm: 8px;
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
 }
 
 * {
@@ -48,7 +48,7 @@ st.markdown("""
 }
 
 .main > div {
-    padding-top: var(--spacing-lg);
+    padding-top: var(--spacing-sm);
 }
 
 .main-header {
@@ -83,21 +83,22 @@ st.markdown("""
     line-height: 1.6;
 }
 
-/* File uploader styling */
-[data-testid="stFileUploader"] {
+/* File uploader styling - compact version */
+.compact-uploader [data-testid="stFileUploader"] {
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: var(--border-radius-sm);
-    padding: var(--spacing-md);
-    border: 2px solid var(--glass-border);
+    padding: var(--spacing-sm);
+    border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-light);
     transition: all 0.3s ease;
-    margin-bottom: var(--spacing-lg);
+    margin: var(--spacing-sm) 0;
+    max-width: 400px;
 }
 
-[data-testid="stFileUploader"]:hover {
-    border-color: #667eea;
+.compact-uploader [data-testid="stFileUploader"]:hover {
+    border-color: #888;
     transform: translateY(-1px);
     box-shadow: var(--shadow-medium);
 }
@@ -536,21 +537,23 @@ def main():
     """
     Main application function.
     """
-    # Modern header section
+    # Modern header section with integrated file uploader
     st.markdown("""
     <div class="main-header">
         <h1 style="margin: 0; font-size: 2.5rem; font-weight: 700;">Texas Household Heat Map Generator</h1>
         <p style="margin: 0.5rem 0 0 0; font-size: 1rem; opacity: 0.9;">Powered By Inman Technology Labs</p>
-        <p style="margin: 1rem 0 0 0; font-size: 1.1rem; opacity: 0.95;">Upload a CSV file with Texas zip code household data to generate an interactive heat map</p>
+        <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.95;">Upload a CSV file with Texas zip code household data to generate an interactive heat map</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # File uploader in main content
+    # Compact file uploader in header area
+    st.markdown('<div class="compact-uploader">', unsafe_allow_html=True)
     uploaded_file = st.file_uploader(
         "Choose your CSV file",
         type=['csv'],
         help="Upload a CSV file with columns: Zip Codes, City, Number of Households"
     )
+    st.markdown('</div>', unsafe_allow_html=True)
     
     # Main content area
     if uploaded_file is not None:
@@ -575,8 +578,8 @@ def main():
             with st.spinner("Processing data..."):
                 processed_df = clean_and_process_data(df)
             
-            # Modern metrics display
-            st.markdown("<h3 style='color: #667eea; margin-bottom: 1rem;'>📊 Data Overview</h3>", unsafe_allow_html=True)
+            # Compact metrics display
+            st.markdown("<h3 style='color: #ccc; margin: 0.5rem 0;'>📊 Data Overview</h3>", unsafe_allow_html=True)
             col1, col2, col3, col4 = st.columns(4)
             
             with col1:
@@ -592,7 +595,7 @@ def main():
                 avg_households = processed_df['Number of Households'].mean()
                 st.metric("Avg Households/Zip", f"{avg_households:.1f}")
             
-            # Show data preview
+            # Compact data preview
             with st.expander("📊 Data Preview", expanded=False):
                 st.dataframe(processed_df.head(10), use_container_width=True)
             
@@ -619,28 +622,27 @@ def main():
             
             st.plotly_chart(fig, use_container_width=True)
             
-            # Modern data summary section
+            # Consolidated data summary section
             st.markdown("""
             <div class="data-summary">
-                <h3 style="margin-top: 0; margin-bottom: var(--spacing-md); font-weight: 600;">📈 Data Summary</h3>
-                <h4 style="opacity: 0.8; margin-bottom: var(--spacing-md); font-weight: 500;">Top 5 Zip Codes by Households</h4>
-            </div>
+                <h3 style="margin: var(--spacing-sm) 0; font-weight: 600;">📈 Top 5 Zip Codes by Households</h3>
             """, unsafe_allow_html=True)
             
-            # Display top zip codes in a modern format
+            # Display top zip codes in a consolidated format
             top_5 = processed_df.nlargest(5, 'Number of Households')
             
+            summary_content = ""
             for i, (_, row) in enumerate(top_5.iterrows(), 1):
-                st.markdown(f"""
-                <div style="background: var(--glass-bg); backdrop-filter: blur(20px); padding: var(--spacing-md); 
-                            margin: var(--spacing-xs) 0; border-radius: var(--border-radius-sm); 
-                            border-left: 4px solid #667eea; box-shadow: var(--shadow-light);
-                            border: 1px solid var(--glass-border); color: var(--text-primary);">
-                    <strong style="color: #667eea;">#{i}</strong> 
+                summary_content += f"""
+                <div style="padding: var(--spacing-sm); margin: var(--spacing-xs) 0; 
+                            border-left: 3px solid #888; background: rgba(255,255,255,0.03);">
+                    <strong style="color: #ccc;">#{i}</strong> 
                     <strong>{row['Zip Codes']}</strong> ({row['City']}) - 
-                    <span style="color: #10b981; font-weight: bold;">{row['Number of Households']} households</span>
+                    <span style="color: #4ade80; font-weight: bold;">{row['Number of Households']} households</span>
                 </div>
-                """, unsafe_allow_html=True)
+                """
+            
+            st.markdown(summary_content + "</div>", unsafe_allow_html=True)
             
         except Exception as e:
             st.error(f"❌ Error processing file: {str(e)}")
