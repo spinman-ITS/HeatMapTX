@@ -454,34 +454,31 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     
     plot_df = pd.DataFrame(plot_data)
     
-    # Add simple hover data for better tooltip handling
-    plot_df['hover_text'] = plot_df.apply(lambda row: f"Zip: {row['zip_code']}<br>City: {row['city']}<br>Households: {row['households']}", axis=1)
-    
-    # Create heat map using Plotly Express for better tooltip handling
-    fig = px.scatter_mapbox(
+    # Create heat map using updated Plotly Express scatter_map
+    fig = px.scatter_map(
         plot_df,
         lat='lat',
         lon='lon',
         size='households',
         color='households',
-        hover_data={'zip_code': True, 'city': True, 'households': True, 'lat': False, 'lon': False, 'hover_text': False},
-        color_continuous_scale=[[0, 'yellow'], [0.5, 'orange'], [1, 'red']],
+        hover_data={'zip_code': True, 'city': True, 'households': True, 'lat': False, 'lon': False},
+        color_continuous_scale=['yellow', 'orange', 'red'],
         size_max=40,
         zoom=8,
         center=dict(lat=32.8, lon=-97.0),
-        mapbox_style='open-street-map',
+        map_style='open-street-map',
         title='Texas Household Heat Map with Trademark Church',
         height=600
     )
     
-    # Add text labels for household numbers
+    # Add text labels for household numbers on top of markers
     fig.add_trace(
         go.Scattermap(
             lat=plot_df['lat'],
             lon=plot_df['lon'],
             mode='text',
             text=plot_df['households'].astype(str),
-            textfont=dict(size=10, color='black'),
+            textfont=dict(size=10, color='black', family='Arial Black'),
             showlegend=False,
             hoverinfo='skip'
         )
