@@ -83,24 +83,40 @@ st.markdown("""
     line-height: 1.6;
 }
 
-/* File uploader styling - compact version */
+/* File uploader styling - compact and centered */
+.compact-uploader {
+    display: flex;
+    justify-content: center;
+    margin: var(--spacing-md) 0;
+}
+
 .compact-uploader [data-testid="stFileUploader"] {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: var(--border-radius-sm);
-    padding: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-light);
     transition: all 0.3s ease;
-    margin: var(--spacing-sm) 0;
-    max-width: 400px;
+    max-width: 350px;
+    width: 100%;
 }
 
 .compact-uploader [data-testid="stFileUploader"]:hover {
     border-color: #888;
     transform: translateY(-1px);
     box-shadow: var(--shadow-medium);
+}
+
+.compact-uploader [data-testid="stFileUploader"] > div {
+    margin: 0;
+}
+
+.compact-uploader [data-testid="stFileUploader"] label {
+    text-align: center;
+    display: block;
+    margin-bottom: var(--spacing-xs);
 }
 
 .stFileUploader > div {
