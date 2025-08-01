@@ -454,35 +454,36 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     
     plot_df = pd.DataFrame(plot_data)
     
-    # Create a heat map using go.Scattermap for more control
-    fig = go.Figure()
+    # Add simple hover data for better tooltip handling
+    plot_df['hover_text'] = plot_df.apply(lambda row: f"Zip: {row['zip_code']}<br>City: {row['city']}<br>Households: {row['households']}", axis=1)
     
-    # Add household data points with traditional heat map colors
+    # Create heat map using Plotly Express for better tooltip handling
+    fig = px.scatter_mapbox(
+        plot_df,
+        lat='lat',
+        lon='lon',
+        size='households',
+        color='households',
+        hover_data={'zip_code': True, 'city': True, 'households': True, 'lat': False, 'lon': False, 'hover_text': False},
+        color_continuous_scale=[[0, 'yellow'], [0.5, 'orange'], [1, 'red']],
+        size_max=40,
+        zoom=8,
+        center=dict(lat=32.8, lon=-97.0),
+        mapbox_style='open-street-map',
+        title='Texas Household Heat Map with Trademark Church',
+        height=600
+    )
+    
+    # Add text labels for household numbers
     fig.add_trace(
-        go.Scattermapbox(
+        go.Scattermap(
             lat=plot_df['lat'],
             lon=plot_df['lon'],
-            mode='markers+text',
-            marker=dict(
-                size=plot_df['households'] * 2 + 10,  # Scale marker size
-                color=plot_df['households'],
-                colorscale=[[0, 'yellow'], [0.5, 'orange'], [1, 'red']],  # Custom heat map: yellow to red
-                reversescale=False,  # Red for high values, yellow for low values
-                colorbar=dict(
-                    title="Number of Households",
-                    x=1.02
-                ),
-                showscale=True,
-                opacity=0.8
-            ),
-            text=plot_df['households'].astype(str),  # Show household numbers
-            textposition='middle center',
+            mode='text',
+            text=plot_df['households'].astype(str),
             textfont=dict(size=10, color='black'),
-            hovertext=[f"Zip Code: {row['zip_code']}<br>City: {row['city']}<br>Households: {row['households']}" 
-                      for _, row in plot_df.iterrows()],
-            hoverinfo='text',
-            name='Household Data',
-            showlegend=False
+            showlegend=False,
+            hoverinfo='skip'
         )
     )
     
@@ -494,7 +495,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
         church_lat, church_lon = church_coords
         # Add Trademark Church marker with TM logo
         fig.add_trace(
-            go.Scattermapbox(
+            go.Scattermap(
                 lat=[church_lat],
                 lon=[church_lon],
                 mode='markers+text',
@@ -506,35 +507,22 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
                 text=['TM'],
                 textposition='middle center',
                 textfont=dict(size=12, color='white', family='Arial Black'),
-                hovertext='Trademark Church<br>7101 Trail Lake Dr<br>Fort Worth, TX 76133',
-                hoverinfo='text',
+                hovertemplate='<b>Trademark Church</b><br>7101 Trail Lake Dr<br>Fort Worth, TX 76133<extra></extra>',
                 name='Trademark Church (TM)',
                 showlegend=True
             )
         )
     
-    # Update layout for the map
+    # Update layout
     fig.update_layout(
-        height=600,
         margin=dict(l=0, r=0, t=50, b=0),
-        mapbox=dict(
-            style='open-street-map',
-            center=dict(lat=32.8, lon=-97.0),  # Center closer to Fort Worth area
-            zoom=8
-        ),
-        title=dict(
-            text='Texas Household Heat Map with Trademark Church',
-            x=0.5,
-            xanchor='center'
-        ),
         showlegend=True,
         legend=dict(
             yanchor="top",
             y=0.99,
             xanchor="left",
             x=0.01
-        ),
-# Remove custom hover styling to use Plotly defaults
+        )
     )
     
     return fig
