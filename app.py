@@ -632,7 +632,7 @@ def main():
             # Consolidated data summary section
             st.markdown("""
             <div class="data-summary">
-                <h4 style="margin: var(--spacing-xs) 0 var(--spacing-sm) 0; font-weight: 600; font-size: 1.1rem;">📈 Top 5 Zip Codes by Households</h4>
+                <p style="margin: 0.2rem 0 0.5rem 0; font-weight: 600; font-size: 0.9rem; color: var(--text-secondary);">📈 Top 5 Zip Codes by Households</p>
             """, unsafe_allow_html=True)
             
             # Display top zip codes in a consolidated format
