@@ -545,15 +545,6 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # File upload section in main content area
-    st.markdown("""
-    <div style="background: var(--glass-bg); backdrop-filter: blur(20px); border-radius: var(--border-radius-sm); 
-                padding: var(--spacing-lg); margin-bottom: var(--spacing-lg); border: 1px solid var(--glass-border);
-                box-shadow: var(--shadow-light);">
-        <h3 style="color: var(--text-primary); margin-top: 0; margin-bottom: var(--spacing-md); font-weight: 600;">📁 Upload Your Data</h3>
-    </div>
-    """, unsafe_allow_html=True)
-    
     # File uploader in main content
     uploaded_file = st.file_uploader(
         "Choose your CSV file",
@@ -656,35 +647,8 @@ def main():
             st.markdown("Please ensure your CSV file is properly formatted and contains valid data.")
     
     else:
-        # Modern welcome section when no file is uploaded
-        st.markdown("""
-        <div style="background: var(--glass-bg); backdrop-filter: blur(20px); border-radius: var(--border-radius); 
-                    padding: var(--spacing-xl); margin: var(--spacing-lg) 0; border: 1px solid var(--glass-border);
-                    box-shadow: var(--shadow-light); text-align: center; color: var(--text-primary);">
-            <h3 style="margin-bottom: var(--spacing-md); font-weight: 600;">📋 Sample CSV Format</h3>
-            <p style="margin-bottom: var(--spacing-lg); opacity: 0.9;">Your CSV file should have the following structure:</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        sample_data = {
-            'Zip Codes': ['76123', '76133', '76036', '76116', '76132'],
-            'City': ['Fort Worth', 'Fort Worth', 'Crowley', 'Fort Worth', 'Fort Worth'],
-            'Number of Households': [74, 52, 42, 22, 21]
-        }
-        
-        sample_df = pd.DataFrame(sample_data)
-        st.dataframe(sample_df, use_container_width=True)
-        
-        # Download sample CSV with modern styling
-        csv_sample = sample_df.to_csv(index=False)
-        st.download_button(
-            label="📥 Download Sample CSV",
-            data=csv_sample,
-            file_name="sample_texas_households.csv",
-            mime="text/csv"
-        )
-        
-        st.markdown("</div></div>", unsafe_allow_html=True)
+        # Show nothing when no file is uploaded - clean minimal interface
+        pass
 
 if __name__ == "__main__":
     main()
