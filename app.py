@@ -542,12 +542,11 @@ def main():
     """
     Main application function.
     """
-    # Modern header section with integrated file uploader
+    # Modern header section
     st.markdown("""
     <div class="main-header">
         <h1 style="margin: 0; font-size: 2.5rem; font-weight: 700;">Texas Household Heat Map Generator</h1>
         <p style="margin: 0.5rem 0 0 0; font-size: 1rem; opacity: 0.9;">Powered By Inman Technology Labs</p>
-        <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; opacity: 0.95;">Upload a CSV file with Texas zip code household data to generate an interactive heat map</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -556,7 +555,7 @@ def main():
     with col2:
         st.markdown('<div class="compact-uploader">', unsafe_allow_html=True)
         uploaded_file = st.file_uploader(
-            "Choose your CSV file",
+            "Upload a CSV file with Texas zip code household data to generate an interactive heat map",
             type=['csv'],
             help="Upload a CSV file with columns: Zip Codes, City, Number of Households"
         )
