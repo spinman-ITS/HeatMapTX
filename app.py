@@ -12,7 +12,7 @@ st.set_page_config(
     page_title="Texas Household Heat Map",
     page_icon="🗺️",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 # Modern CSS styling with enhanced design system
@@ -83,25 +83,21 @@ st.markdown("""
     line-height: 1.6;
 }
 
-/* Sidebar styling */
-.stSidebar > div {
-    background: var(--primary-gradient);
-    border-right: 1px solid var(--glass-border);
-}
-
-.stSidebar [data-testid="stFileUploader"] {
-    background: var(--glass-bg);
+/* File uploader styling */
+[data-testid="stFileUploader"] {
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: var(--border-radius-sm);
     padding: var(--spacing-md);
-    border: 1px solid var(--glass-border);
+    border: 2px solid var(--glass-border);
     box-shadow: var(--shadow-light);
     transition: all 0.3s ease;
+    margin-bottom: var(--spacing-lg);
 }
 
-.stSidebar [data-testid="stFileUploader"]:hover {
-    background: rgba(255, 255, 255, 0.12);
+[data-testid="stFileUploader"]:hover {
+    border-color: #667eea;
     transform: translateY(-1px);
     box-shadow: var(--shadow-medium);
 }
@@ -549,16 +545,21 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # Modern sidebar for file upload
-    with st.sidebar:
-        # File uploader
-        uploaded_file = st.file_uploader(
-            "File Upload",
-            type=['csv'],
-            help="Upload a CSV file with columns: Zip Codes, City, Number of Households"
-        )
-        
-
+    # File upload section in main content area
+    st.markdown("""
+    <div style="background: var(--glass-bg); backdrop-filter: blur(20px); border-radius: var(--border-radius-sm); 
+                padding: var(--spacing-lg); margin-bottom: var(--spacing-lg); border: 1px solid var(--glass-border);
+                box-shadow: var(--shadow-light);">
+        <h3 style="color: var(--text-primary); margin-top: 0; margin-bottom: var(--spacing-md); font-weight: 600;">📁 Upload Your Data</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # File uploader in main content
+    uploaded_file = st.file_uploader(
+        "Choose your CSV file",
+        type=['csv'],
+        help="Upload a CSV file with columns: Zip Codes, City, Number of Households"
+    )
     
     # Main content area
     if uploaded_file is not None:
@@ -630,8 +631,8 @@ def main():
             # Modern data summary section
             st.markdown("""
             <div class="data-summary">
-                <h3 style="color: #667eea; margin-top: 0;">📈 Data Summary</h3>
-                <h4 style="color: #555; margin-bottom: 1rem;">Top 5 Zip Codes by Households</h4>
+                <h3 style="margin-top: 0; margin-bottom: var(--spacing-md); font-weight: 600;">📈 Data Summary</h3>
+                <h4 style="opacity: 0.8; margin-bottom: var(--spacing-md); font-weight: 500;">Top 5 Zip Codes by Households</h4>
             </div>
             """, unsafe_allow_html=True)
             
@@ -640,10 +641,13 @@ def main():
             
             for i, (_, row) in enumerate(top_5.iterrows(), 1):
                 st.markdown(f"""
-                <div style="background-color: #f8f9fa; padding: 0.8rem; margin: 0.5rem 0; border-radius: 8px; border-left: 4px solid #667eea;">
+                <div style="background: var(--glass-bg); backdrop-filter: blur(20px); padding: var(--spacing-md); 
+                            margin: var(--spacing-xs) 0; border-radius: var(--border-radius-sm); 
+                            border-left: 4px solid #667eea; box-shadow: var(--shadow-light);
+                            border: 1px solid var(--glass-border); color: var(--text-primary);">
                     <strong style="color: #667eea;">#{i}</strong> 
                     <strong>{row['Zip Codes']}</strong> ({row['City']}) - 
-                    <span style="color: #28a745; font-weight: bold;">{row['Number of Households']} households</span>
+                    <span style="color: #10b981; font-weight: bold;">{row['Number of Households']} households</span>
                 </div>
                 """, unsafe_allow_html=True)
             
@@ -654,12 +658,12 @@ def main():
     else:
         # Modern welcome section when no file is uploaded
         st.markdown("""
-        <div style="text-align: center; padding: 3rem 1rem; background-color: #f8f9fa; border-radius: 15px; margin: 2rem 0;">
-            <h3 style="color: #667eea; margin-bottom: 1rem;">Welcome to the Texas Household Heat Map Generator</h3>
-            <p style="font-size: 1.1rem; color: #666; margin-bottom: 2rem;">Upload a CSV file using the sidebar to generate an interactive heat map visualization</p>
-            <div style="background-color: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin: 2rem auto; max-width: 600px;">
-                <h4 style="color: #667eea; margin-top: 0;">📋 Sample CSV Format</h4>
-                <p style="color: #666; margin-bottom: 1.5rem;">Your CSV file should have the following structure:</p>
+        <div style="background: var(--glass-bg); backdrop-filter: blur(20px); border-radius: var(--border-radius); 
+                    padding: var(--spacing-xl); margin: var(--spacing-lg) 0; border: 1px solid var(--glass-border);
+                    box-shadow: var(--shadow-light); text-align: center; color: var(--text-primary);">
+            <h3 style="margin-bottom: var(--spacing-md); font-weight: 600;">📋 Sample CSV Format</h3>
+            <p style="margin-bottom: var(--spacing-lg); opacity: 0.9;">Your CSV file should have the following structure:</p>
+        </div>
         """, unsafe_allow_html=True)
         
         sample_data = {
