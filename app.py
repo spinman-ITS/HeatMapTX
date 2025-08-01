@@ -635,7 +635,7 @@ def main():
             # Consolidated data summary section
             st.markdown("""
             <div class="data-summary">
-                <p style="margin: 0.2rem 0 0.5rem 0; font-weight: 600; font-size: 0.9rem; color: var(--text-secondary);">📈 Top 5 Zip Codes by Households</p>
+                <p style="margin: 0.2rem 0 0.5rem 0; font-weight: 600; font-size: 1.2rem; color: var(--text-secondary);">📈 Top 5 Zip Codes by Households</p>
             """, unsafe_allow_html=True)
             
             # Display top zip codes in a consolidated format
@@ -659,8 +659,24 @@ def main():
             st.markdown("Please ensure your CSV file is properly formatted and contains valid data.")
     
     else:
-        # Show nothing when no file is uploaded - clean minimal interface
-        pass
+        # Sample CSV download button when no file is uploaded
+        col1, col2, col3 = st.columns([1, 1, 1])
+        with col2:
+            sample_data = {
+                'Zip Codes': ['76123', '76133', '76036', '76116', '76132'],
+                'City': ['Fort Worth', 'Fort Worth', 'Crowley', 'Fort Worth', 'Fort Worth'],
+                'Number of Households': [74, 52, 42, 22, 21]
+            }
+            
+            sample_df = pd.DataFrame(sample_data)
+            csv_sample = sample_df.to_csv(index=False)
+            
+            st.download_button(
+                label="📥 Download Sample CSV",
+                data=csv_sample,
+                file_name="sample_texas_households.csv",
+                mime="text/csv"
+            )
 
 if __name__ == "__main__":
     main()
