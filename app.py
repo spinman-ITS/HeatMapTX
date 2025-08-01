@@ -459,7 +459,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     
     # Add household data points with traditional heat map colors
     fig.add_trace(
-        go.Scattermap(
+        go.Scattermapbox(
             lat=plot_df['lat'],
             lon=plot_df['lon'],
             mode='markers+text',
@@ -494,7 +494,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
         church_lat, church_lon = church_coords
         # Add Trademark Church marker with TM logo
         fig.add_trace(
-            go.Scattermap(
+            go.Scattermapbox(
                 lat=[church_lat],
                 lon=[church_lon],
                 mode='markers+text',
@@ -517,7 +517,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     fig.update_layout(
         height=600,
         margin=dict(l=0, r=0, t=50, b=0),
-        map=dict(
+        mapbox=dict(
             style='open-street-map',
             center=dict(lat=32.8, lon=-97.0),  # Center closer to Fort Worth area
             zoom=8
