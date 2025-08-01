@@ -15,105 +15,277 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for modern UI
+# Modern CSS styling with enhanced design system
 st.markdown("""
 <style>
-    /* Main container styling */
-    .main > div {
-        padding-top: 2rem;
-    }
-    
-    /* Header styling */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --shadow-light: 0 8px 32px rgba(31, 38, 135, 0.15);
+    --shadow-medium: 0 12px 40px rgba(31, 38, 135, 0.25);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.85);
+    --text-muted: rgba(255, 255, 255, 0.65);
+    --border-radius: 16px;
+    --border-radius-sm: 12px;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+}
+
+* {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.stApp {
+    background: var(--primary-gradient);
+    background-attachment: fixed;
+}
+
+.main > div {
+    padding-top: var(--spacing-lg);
+}
+
+.main-header {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-lg);
+    border: 1px solid var(--glass-border);
+    text-align: center;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-medium);
+    transition: all 0.3s ease;
+}
+
+.main-header:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 48px rgba(31, 38, 135, 0.3);
+}
+
+.main-header h1 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: var(--spacing-xs);
+}
+
+.main-header p {
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.6;
+}
+
+/* Sidebar styling */
+.stSidebar > div {
+    background: var(--primary-gradient);
+    border-right: 1px solid var(--glass-border);
+}
+
+.stSidebar [data-testid="stFileUploader"] {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-md);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-light);
+    transition: all 0.3s ease;
+}
+
+.stSidebar [data-testid="stFileUploader"]:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium);
+}
+
+.stFileUploader > div {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--border-radius-sm);
+    border: 2px dashed #667eea;
+    padding: var(--spacing-md);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stFileUploader > div:hover {
+    border-color: #764ba2;
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.02);
+}
+
+.stFileUploader label {
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+    font-size: 1.1rem !important;
+    margin-bottom: var(--spacing-sm) !important;
+}
+
+/* Alert styling */
+.stAlert > div {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--glass-border);
+    border-left: 4px solid #667eea;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-light);
+}
+
+/* Metric container styling */
+[data-testid="metric-container"] {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-light);
+    transition: all 0.3s ease;
+}
+
+[data-testid="metric-container"]:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+[data-testid="metric-container"] > label {
+    color: var(--text-muted) !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+[data-testid="metric-container"] > div {
+    color: var(--text-primary) !important;
+    font-weight: 700 !important;
+    font-size: 2rem !important;
+}
+
+/* Success/Error/Info/Warning messages */
+.stSuccess > div {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-light);
+}
+
+.stError > div {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-light);
+}
+
+.stInfo > div {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-light);
+}
+
+.stWarning > div {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-light);
+}
+
+/* Button styling */
+.stButton > button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-light);
+}
+
+.stButton > button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+/* Progress bar styling */
+.stProgress > div > div {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+}
+
+/* Spinner styling */
+.stSpinner > div {
+    border-color: var(--text-primary) !important;
+}
+
+/* Data summary section */
+.data-summary {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    margin-top: var(--spacing-lg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
     .main-header {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        padding: 2rem;
-        border-radius: 10px;
-        margin-bottom: 2rem;
-        color: white;
-        text-align: center;
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
     }
     
-    /* Sidebar styling */
-    .css-1d391kg, .css-1cypcdb {
-        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-        color: white;
+    .main-header h1 {
+        font-size: 1.8rem !important;
     }
     
-    /* Sidebar content styling */
-    .css-1d391kg .stMarkdown, .css-1cypcdb .stMarkdown {
-        color: white;
+    [data-testid="metric-container"] > div {
+        font-size: 1.5rem !important;
     }
-    
-    /* File uploader styling */
-    [data-testid="stFileUploader"] {
-        background-color: rgba(255,255,255,0.1);
-        border-radius: 10px;
-        padding: 1rem;
-        backdrop-filter: blur(10px);
-    }
-    
-    /* Metric cards styling */
-    [data-testid="metric-container"] {
-        background-color: white;
-        border: 1px solid #e0e0e0;
-        padding: 1rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    /* Upload section styling */
-    .upload-section {
-        background-color: rgba(255,255,255,0.15);
-        padding: 1.5rem;
-        border-radius: 15px;
-        border: 1px solid rgba(255,255,255,0.2);
-        margin-bottom: 1rem;
-        backdrop-filter: blur(10px);
-    }
-    
-    /* Info section styling */
-    .info-section {
-        background-color: rgba(255,255,255,0.1);
-        padding: 1.5rem;
-        border-radius: 15px;
-        border: 1px solid rgba(255,255,255,0.2);
-        backdrop-filter: blur(10px);
-    }
-    
-    /* Sidebar text styling */
-    .upload-section h3, .info-section h3 {
-        color: white !important;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    }
-    
-    .info-section p, .info-section li {
-        color: rgba(255,255,255,0.9) !important;
-    }
-    
-    /* Success/warning/error message styling */
-    .stSuccess, .stWarning, .stError {
-        border-radius: 8px;
-        margin: 1rem 0;
-    }
-    
-    /* Button styling */
-    .stButton > button {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
-        font-weight: 500;
-    }
-    
-    /* Data summary section */
-    .data-summary {
-        background-color: white;
-        padding: 1.5rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        margin-top: 2rem;
-    }
+}
+
+/* Smooth animations */
+* {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
 </style>
 """, unsafe_allow_html=True)
 
