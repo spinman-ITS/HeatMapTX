@@ -473,8 +473,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
                     x=1.02
                 ),
                 showscale=True,
-                opacity=0.8,
-                line=dict(width=1, color='black')  # Add border for visibility
+                opacity=0.8
             ),
             text=plot_df['households'].astype(str),
             textposition='middle center',
