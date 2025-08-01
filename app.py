@@ -84,12 +84,6 @@ st.markdown("""
 }
 
 /* File uploader styling - compact and centered */
-.compact-uploader {
-    display: flex;
-    justify-content: center;
-    margin: var(--spacing-md) 0;
-}
-
 .compact-uploader [data-testid="stFileUploader"] {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -99,18 +93,13 @@ st.markdown("""
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-light);
     transition: all 0.3s ease;
-    max-width: 350px;
-    width: 100%;
+    margin: var(--spacing-md) 0;
 }
 
 .compact-uploader [data-testid="stFileUploader"]:hover {
     border-color: #888;
     transform: translateY(-1px);
     box-shadow: var(--shadow-medium);
-}
-
-.compact-uploader [data-testid="stFileUploader"] > div {
-    margin: 0;
 }
 
 .compact-uploader [data-testid="stFileUploader"] label {
@@ -562,14 +551,16 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # Compact file uploader in header area
-    st.markdown('<div class="compact-uploader">', unsafe_allow_html=True)
-    uploaded_file = st.file_uploader(
-        "Choose your CSV file",
-        type=['csv'],
-        help="Upload a CSV file with columns: Zip Codes, City, Number of Households"
-    )
-    st.markdown('</div>', unsafe_allow_html=True)
+    # Compact file uploader in header area using columns for centering
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown('<div class="compact-uploader">', unsafe_allow_html=True)
+        uploaded_file = st.file_uploader(
+            "Choose your CSV file",
+            type=['csv'],
+            help="Upload a CSV file with columns: Zip Codes, City, Number of Households"
+        )
+        st.markdown('</div>', unsafe_allow_html=True)
     
     # Main content area
     if uploaded_file is not None:
