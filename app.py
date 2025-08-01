@@ -629,6 +629,9 @@ def main():
             
             st.plotly_chart(fig, use_container_width=True)
             
+            # Add spacing before data summary section
+            st.markdown("<div style='margin-top: 2rem;'></div>", unsafe_allow_html=True)
+            
             # Consolidated data summary section
             st.markdown("""
             <div class="data-summary">
