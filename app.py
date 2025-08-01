@@ -478,9 +478,9 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
             text=plot_df['households'].astype(str),  # Show household numbers
             textposition='middle center',
             textfont=dict(size=10, color='black'),
-            hovertemplate='<b>Zip Code:</b> %{customdata[0]}<br>' +
-                         '<b>City:</b> %{customdata[1]}<br>' +
-                         '<b>Households:</b> %{customdata[2]}<extra></extra>',
+            hovertemplate='<b style="color: white;">Zip Code:</b> <span style="color: white;">%{customdata[0]}</span><br>' +
+                         '<b style="color: white;">City:</b> <span style="color: white;">%{customdata[1]}</span><br>' +
+                         '<b style="color: white;">Households:</b> <span style="color: white;">%{customdata[2]}</span><extra></extra>',
             customdata=plot_df[['zip_code', 'city', 'households']].values,
             name='Household Data',
             showlegend=False
@@ -507,7 +507,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
                 text=['TM'],
                 textposition='middle center',
                 textfont=dict(size=12, color='white', family='Arial Black'),
-                hovertemplate='<b>Trademark Church</b><br>7101 Trail Lake Dr<br>Fort Worth, TX 76133<extra></extra>',
+                hovertemplate='<b style="color: white;">Trademark Church</b><br><span style="color: white;">7101 Trail Lake Dr</span><br><span style="color: white;">Fort Worth, TX 76133</span><extra></extra>',
                 name='Trademark Church (TM)',
                 showlegend=True
             )
@@ -533,6 +533,13 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
             y=0.99,
             xanchor="left",
             x=0.01
+        ),
+        # Fix hover tooltip styling
+        hoverlabel=dict(
+            bgcolor="rgba(0,0,0,0.8)",
+            bordercolor="white",
+            font_size=12,
+            font_family="Inter"
         )
     )
     
