@@ -454,33 +454,37 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     
     plot_df = pd.DataFrame(plot_data)
     
-    # Create heat map using updated Plotly Express scatter_map
-    fig = px.scatter_map(
-        plot_df,
-        lat='lat',
-        lon='lon',
-        size='households',
-        color='households',
-        hover_data={'zip_code': True, 'city': True, 'households': True, 'lat': False, 'lon': False},
-        color_continuous_scale=['yellow', 'orange', 'red'],
-        size_max=40,
-        zoom=8,
-        center=dict(lat=32.8, lon=-97.0),
-        map_style='open-street-map',
-        title='Texas Household Heat Map with Trademark Church',
-        height=600
-    )
+    # Create heat map using go.Scattermap for reliable display
+    fig = go.Figure()
     
-    # Add text labels for household numbers on top of markers
+    # Add household data points with heat map colors
     fig.add_trace(
         go.Scattermap(
             lat=plot_df['lat'],
             lon=plot_df['lon'],
-            mode='text',
+            mode='markers+text',
+            marker=dict(
+                size=plot_df['households'] * 2 + 15,  # Scale marker size
+                color=plot_df['households'],
+                colorscale='Viridis',  # Use a reliable colorscale
+                reversescale=False,
+                colorbar=dict(
+                    title="Households",
+                    x=1.02
+                ),
+                showscale=True,
+                opacity=0.8,
+                line=dict(width=1, color='black')  # Add border for visibility
+            ),
             text=plot_df['households'].astype(str),
-            textfont=dict(size=10, color='black', family='Arial Black'),
-            showlegend=False,
-            hoverinfo='skip'
+            textposition='middle center',
+            textfont=dict(size=10, color='white', family='Arial Black'),
+            hovertemplate='<b>Zip Code:</b> %{customdata[0]}<br>' +
+                         '<b>City:</b> %{customdata[1]}<br>' +
+                         '<b>Households:</b> %{customdata[2]}<extra></extra>',
+            customdata=plot_df[['zip_code', 'city', 'households']].values,
+            name='Household Data',
+            showlegend=False
         )
     )
     
@@ -510,9 +514,20 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
             )
         )
     
-    # Update layout
+    # Update layout for the map
     fig.update_layout(
+        height=600,
         margin=dict(l=0, r=0, t=50, b=0),
+        map=dict(
+            style='open-street-map',
+            center=dict(lat=32.8, lon=-97.0),
+            zoom=8
+        ),
+        title=dict(
+            text='Texas Household Heat Map with Trademark Church',
+            x=0.5,
+            xanchor='center'
+        ),
         showlegend=True,
         legend=dict(
             yanchor="top",
