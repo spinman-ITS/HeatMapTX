@@ -476,11 +476,9 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
             text=plot_df['households'].astype(str),  # Show household numbers on markers
             textposition='middle center',
             textfont=dict(size=10, color='black', family='Arial Black'),
-            customdata=plot_df[['zip_code', 'city', 'households']].values,
-            hovertemplate='<b>Zip Code: %{customdata[0]}</b><br>' +
-                         'City: %{customdata[1]}<br>' +
-                         'Households: %{customdata[2]}<br>' +
-                         '<extra></extra>',  # <extra></extra> removes the trace name box
+            hoverinfo='text',
+            hovertext=[f"<b>Zip Code: {row['zip_code']}</b><br>City: {row['city']}<br>Households: {row['households']}" 
+                      for _, row in plot_df.iterrows()],
             name='Household Data',
             showlegend=True
         )
@@ -506,7 +504,8 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
                 text=['TM'],
                 textposition='middle center',
                 textfont=dict(size=12, color='white', family='Arial Black'),
-                hovertemplate='<b>Trademark Church</b><br>7101 Trail Lake Dr<br>Fort Worth, TX 76133<extra></extra>',
+                hoverinfo='text',
+                hovertext='<b>Trademark Church</b><br>7101 Trail Lake Dr<br>Fort Worth, TX 76133',
                 name='Trademark Church (TM)',
                 showlegend=True
             )
