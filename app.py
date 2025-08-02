@@ -454,52 +454,40 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     
     plot_df = pd.DataFrame(plot_data)
     
-    # Create heat map with proper color mapping
-    fig = go.Figure()
-    
-    # Define color mapping for heat map effect (yellow to red)
-    max_households = plot_df['households'].max()
-    min_households = plot_df['households'].min()
-    
-    def get_heat_color(households):
-        # Normalize to 0-1 range
-        if max_households == min_households:
-            normalized = 0.5
-        else:
-            normalized = (households - min_households) / (max_households - min_households)
-        
-        # Map to colors: yellow (low) to red (high)
-        if normalized < 0.5:
-            # Yellow to orange
-            return f'rgb({255}, {int(255 - normalized * 100)}, 0)'
-        else:
-            # Orange to red
-            return f'rgb(255, {int(255 - (normalized - 0.5) * 510)}, 0)'
-    
-    # Add household data points
-    colors = [get_heat_color(h) for h in plot_df['households']]
-    
-    fig.add_trace(
-        go.Scattermap(
-            lat=plot_df['lat'],
-            lon=plot_df['lon'],
-            mode='markers+text',
-            marker=dict(
-                size=plot_df['households'] * 2 + 15,
-                color=colors,
-                opacity=0.8
-            ),
-            text=plot_df['households'].astype(str),
-            textposition='middle center',
-            textfont=dict(size=10, color='black', family='Arial Black'),
-            hovertemplate='<b>Zip Code:</b> %{customdata[0]}<br>' +
-                         '<b>City:</b> %{customdata[1]}<br>' +
-                         '<b>Households:</b> %{customdata[2]}<extra></extra>',
-            customdata=plot_df[['zip_code', 'city', 'households']].values,
-            name='Household Data',
-            showlegend=False
-        )
+    # Create heat map using Plotly Express for reliable rendering
+    fig = px.scatter_map(
+        plot_df,
+        lat='lat',
+        lon='lon',
+        size='households',
+        color='households',
+        hover_name='zip_code',
+        hover_data={
+            'city': True,
+            'households': True,
+            'lat': False,
+            'lon': False
+        },
+        color_continuous_scale=['yellow', 'orange', 'red'],
+        size_max=40,
+        zoom=8,
+        center=dict(lat=32.8, lon=-97.0),
+        title='Texas Household Heat Map with Trademark Church',
+        height=600
     )
+    
+    # Add household numbers as text on markers
+    for idx, row in plot_df.iterrows():
+        fig.add_annotation(
+            x=row['lon'],
+            y=row['lat'],
+            text=str(row['households']),
+            showarrow=False,
+            font=dict(size=10, color='black', family='Arial Black'),
+            bgcolor='rgba(255,255,255,0.7)',
+            bordercolor='rgba(0,0,0,0.3)',
+            borderwidth=1
+        )
     
     # Add Trademark Church marker
     church_address = "7101 Trail Lake Dr, Fort Worth TX 76133"
@@ -507,7 +495,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
     
     if church_coords:
         church_lat, church_lon = church_coords
-        # Add Trademark Church marker with TM logo
+        # Add Trademark Church as a separate trace
         fig.add_trace(
             go.Scattermap(
                 lat=[church_lat],
@@ -527,20 +515,9 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
             )
         )
     
-    # Update layout for the map
+    # Update layout
     fig.update_layout(
-        height=600,
         margin=dict(l=0, r=0, t=50, b=0),
-        map=dict(
-            style='open-street-map',
-            center=dict(lat=32.8, lon=-97.0),
-            zoom=8
-        ),
-        title=dict(
-            text='Texas Household Heat Map with Trademark Church',
-            x=0.5,
-            xanchor='center'
-        ),
         showlegend=True,
         legend=dict(
             yanchor="top",
