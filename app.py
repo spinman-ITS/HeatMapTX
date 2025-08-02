@@ -468,8 +468,7 @@ def create_heat_map(df: pd.DataFrame, coordinates: Dict[str, Tuple[float, float]
                 color=plot_df['households'],
                 colorscale='YlOrRd',  # Yellow to Orange to Red
                 colorbar=dict(
-                    title="Households",
-                    titleside="right"
+                    title="Households"
                 ),
                 opacity=0.8,
                 sizemode='diameter'
